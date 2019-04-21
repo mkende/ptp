@@ -30,7 +30,7 @@ use Test::More tests => 5;
 }{
   my $temp = File::Temp->new(SUFFIX => '.001');
   my $f = $temp->filename =~ s/\.001//r;
-  $f =~ s/\\/\\\\/;  # In case we're on a platform using '\' in paths.
+  $f =~ s/\\/\\\\/g;  # In case we're on a platform using '\' in paths.
   ptp(['-e', '$s = spf "%03d", $I', '--tee', "$f.\$s"], \"foo\nbar\n");
   is(slurp($temp->filename), "foo\nbar\n", 'compute output');
 }{

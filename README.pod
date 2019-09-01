@@ -1,5 +1,37 @@
 =head1 PTP - An expressive Pipelining Text Processor
 
+=head1 DESCRIPTION
+
+B<PTP> is a versatile and expressive text processor program. The core features
+that it tries to provide are the following:
+
+=over 8
+
+=item * Provide B<grep>, B<sed>-like and other operations with a coherent
+regular expressions language (B<grep> has a B<-P> flag but B<sed> has nothing of
+the like).
+
+=item * Provide a powerful input/output files support, that is lacking when
+using vanilla-Perl one-liner (recursion in directories, output in-place with
+optional backups, etc.).
+
+=item * Pipelining of multiple operations on multiple files (using a pipeline
+made of several standard tool usually makes it difficult to process several
+input files at once).
+
+=back
+
+See examples of B<PTP> in action in the L<documentation|ptp/EXAMPLES>.
+
+=head2 DOCUMENTATION
+
+You can find the documentation for the program itself on L<meta::cpan|ptp>.
+After the program is installed, you can also get its documentation by running
+any of the following commands: B<man ptp>, B<ptp --help> or B<perldoc ptp>.
+
+The built-in B<--help> rendering will be better if the B<perldoc> program is
+installed. It usually comes in a B<perl-doc> package on most systems.
+
 =head2 INSTALLATION
 
 =head3 Requirements
@@ -34,15 +66,6 @@ run the following command:
 
 Note: if this is the first time that you run the B<cpan> command, you will be
 asked to configure it. The default answer to most questions is usually fine.
-
-=head2 DOCUMENTATION
-
-You can find the documentation for the program itself on L<meta::cpan|ptp>.
-After the progarm is installed, you can also get its documentation by running
-any of the following commands: B<man ptp>, B<ptp --help> or B<perldoc ptp>.
-
-The built-in B<--help> rendering will be better if the B<perldoc> program is
-installed. It usually comes in a B<perl-doc> package on most systems.
 
 =head2 DISTRIBUTION
 

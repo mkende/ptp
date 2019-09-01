@@ -1,6 +1,6 @@
 =head1 PTP - An expressive Pipelining Text Processor
 
-=head1 DESCRIPTION
+=head2 DESCRIPTION
 
 B<PTP> is a versatile and expressive text processor program. The core features
 that it tries to provide are the following:

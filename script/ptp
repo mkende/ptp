@@ -204,6 +204,11 @@ functions used in B<--perl> or B<-n> commands.
 
 Any error in the Perl code will terminate the execution of the program.
 
+=item B<-M> I<module>
+
+Load the given Perl module in the Perl environment. This option cannot be used
+when B<--safe> is specified with level strictly greater than 0.
+
 =item B<-l> I<path>, B<--load>
 
 Same as B<--execute> except that it takes the code to execute from the given

@@ -184,7 +184,10 @@ sub action_flags {(
       sub { push @pipeline, ['mark-line', \&do_perl, {%modes}, 'mark-line',
                              $_[1]] },
   'execute|e=s' =>
-      sub { push @pipeline, ['execute', \&do_execute, {%modes}, $_[1]] },    
+      sub { push @pipeline, ['execute', \&do_execute, {%modes}, 'execute',
+                             $_[1]] },    
+  'M=s' =>
+      sub { push @pipeline, ['M', \&do_execute, {%modes}, 'M', $_[1]] },
   'load|l=s' =>
       sub { push @pipeline, ['load', \&do_load, {%modes}, $_[1]] },
   'sort' => sub { push @pipeline, ['sort', \&do_sort, {%modes}] },

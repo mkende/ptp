@@ -355,11 +355,13 @@ sub do_perl {
 }
 
 sub do_execute {
-  my ($content, $markers, $modes, $options, $code) = @_;
+  my ($content, $markers, $modes, $options, $cmd, $code) = @_;
+  $code = "use $code;" if $cmd eq 'M';
   eval_in_safe_env($code, $options);
   if ($@) {
     chomp($@);
-    die "FATAL: Perl code failed in --execute: ${@}\n";
+    my $scmd = '-'.($cmd =~ s/^(..)/-$1/r); # --execute or -M.
+    die "FATAL: Perl code failed in ${scmd}: ${@}\n";
   }
 }
 

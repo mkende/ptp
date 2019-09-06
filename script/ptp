@@ -529,6 +529,11 @@ Set the B<--input-separator> to the null character (B<\000>) and the
 B<--output-separator> to the empty string. This result in having each file read
 entirely in a single logical line.
 
+=item B<--00>
+
+Set the B<--output-separator> to the null character (B<\000>). This produces
+output compatible with B<-0> option of C<xargs>.
+
 =item B<-h>, B<--help>
 
 Print this help message and exits. Note: the help message will be much printed

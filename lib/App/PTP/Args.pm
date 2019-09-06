@@ -111,6 +111,7 @@ sub options_flags {(
   'fix-final-separator!' => \$options{fix_final_separator},
   '0' => sub { $options{input_separator} = '\000';
                $options{output_separator} = '' },
+  '00' => sub { $options{output_separator} = "\000" },
   'preserve-input-separator|eol' =>
       sub { $options{preserve_eol} = 1; $options{output_separator} = '' },
   'preserve-perl-env!' => \$options{preserve_perl_env},

@@ -208,6 +208,7 @@ sub action_flags {(
   'shuffle' =>
       sub { push @pipeline, ['shuffle', \&do_list_op, {%modes},
                              \&List::Util::shuffle, 0] },
+  'eat' => sub { push @pipeline, ['eat', \&do_eat, {%modes}] },
   'delete-marked' =>
       sub { push @pipeline, ['delete-marked', \&do_delete_marked, {%modes}, 
                              0] },

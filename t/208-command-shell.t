@@ -8,7 +8,7 @@ use lib "$FindBin::Bin/lib";
 
 use AppPtpTest;
 use File::Temp;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 {
   my $temp = File::Temp->new();
@@ -20,6 +20,11 @@ use Test::More tests => 5;
   my $f = $temp->filename;
   my $out = ptp(['--shell', "cat > $f"], \"foo\nbar\nbaz\n");
   is($out, "foo\nbar\nbaz\n", 'does not change output');
+}{
+  my $temp = File::Temp->new();
+  my $f = $temp->filename;
+  my $out = ptp(['--shell', "cat > $f", '--eat'], \"foo\nbar\nbaz\n");
+  is($out, "", 'eat');
 }{
   my $temp = File::Temp->new();
   my $f = $temp->filename;

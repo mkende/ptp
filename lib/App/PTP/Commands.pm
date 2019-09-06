@@ -25,7 +25,7 @@ my @all_cmd =
     qw(prepare_perl_env do_grep do_substitute do_perl
     do_execute do_load do_sort do_list_op do_tail do_head do_delete_marked
     do_insert_marked do_set_markers do_number_lines do_file_name do_line_count
-    do_cut do_paste do_pivot do_tee do_shell);
+    do_cut do_paste do_pivot do_tee do_shell do_eat);
 our @EXPORT_OK = (@all_cmd, 'warn_or_die_if_needed');
 our %EXPORT_TAGS = (CMD => \@all_cmd);
 
@@ -601,6 +601,12 @@ sub do_shell {
     write_handle($pipe, $content, $modes->{missing_final_separator}, $options);
     close $pipe or die "FATAL: Cannot close pipe for command given to --${command}: $!\n";
   }  
+}
+
+sub do_eat {
+  my ($content, $markers, $modes, $options) = @_;
+  @$content = ();
+  @$markers = ();
 }
 
 1;

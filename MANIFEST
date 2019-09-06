@@ -14,6 +14,7 @@ t/002-cmd-args.t
 t/003-benchmarks.t
 t/100-options-fix-final-separator.t
 t/101-options-input-output-encoding.t
+t/102-options-input-output-separator.t
 t/200-command-grep.t
 t/201-command-substitute.t
 t/202-command-perl.t

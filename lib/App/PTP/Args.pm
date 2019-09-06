@@ -249,7 +249,9 @@ sub action_flags {(
       sub { push @pipeline, ['prefix-file-name', \&do_file_name, {%modes}, 0] },
   'line-count|lc' =>
       sub { push @pipeline, ['line-count', \&do_line_count, {%modes}] },
-  'tee=s' => sub { push @pipeline, ['tee', \&do_tee, {%modes}, $_[1]] }
+  'tee=s' => sub { push @pipeline, ['tee', \&do_tee, {%modes}, $_[1]] },
+  'shell=s' => sub { push @pipeline, ['shell', \&do_shell, {%modes}, 'shell',
+                                      $_[1]] }
 )}
 
 sub all_args {

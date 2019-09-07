@@ -217,7 +217,7 @@ sub prepare_re2 {
 sub maybe_interpolate {
   my ($str, $modes, $options, $command) = @_;
   if (not $modes->{quote_regex}) {
-    $str = eval_in_safe_env("<<~\"PTP_EOF_WORD\"\n${str}\nPTP_EOF_WORD\n", $options);
+    $str = eval_in_safe_env("<<\"PTP_EOF_WORD\"\n${str}\nPTP_EOF_WORD\n", $options);
     die "FATAL: Cannot eval string for --${command}: ${@}\n" if $@;
     chomp($str);
   }

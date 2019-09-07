@@ -81,7 +81,7 @@ sub process_all {
     my @content;
     for my $input (@$inputs) {
       my ($content, $missing_separator) =
-          read_input($input, $options);
+          read_input($input, $options, $stdin);
       push @content, @$content;
       $missing_final_separator = $missing_separator;
     }

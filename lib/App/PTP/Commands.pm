@@ -513,8 +513,11 @@ sub do_file_name {
         ."\n";
   }
   if ($replace_all) {
-    @$content = ($name);
-    @$markers = (0);
+    # Does nothing to empty file.
+    if (@$content) {
+      @$content = ($name);
+      @$markers = (0);
+    }
   } else {
     unshift @$content, $name;
     unshift @$markers, 0;

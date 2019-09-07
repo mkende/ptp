@@ -400,7 +400,9 @@ a look at the  L</EXAMPLES> section.
 
 =item B<--fn>, B<--file-name>
 
-Replace the entire content of the input with a single line containing the name of the file currently being processed.
+Replace the entire content of the input with a single line containing the name
+of the file currently being processed. Does nothing if a file is entirely empty
+at that point in the processing.
 
 The resulting line has its marker unset.
 

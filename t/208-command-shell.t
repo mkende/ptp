@@ -8,7 +8,11 @@ use lib "$FindBin::Bin/lib";
 
 use AppPtpTest;
 use File::Temp;
-use Test::More tests => 6;
+use Test::More;
+
+unless ($^O =~ /cygwin|linux/) {
+  plan skip_all => 'Shell tests disabled on non-linux-like platform.';
+}
 
 {
   my $temp = File::Temp->new();
@@ -28,16 +32,18 @@ use Test::More tests => 6;
 }{
   my $temp = File::Temp->new();
   my $f = $temp->filename;
-  my $out = ptp(['--shell', "echo \"foo\"> $f"], \"foo\nbar\nbaz\n");
+  my $out = ptp(['--shell', "echo \"foo\" > $f"], \"foo\nbar\nbaz\n");
   is(slurp($f), "foo\n", 'command with quote');
 }{
   my $temp = File::Temp->new();
   my $f = $temp->filename;
-  my $out = ptp(['-Q', '--shell', "echo \"foo\"> $f"], \"foo\nbar\nbaz\n");
+  my $out = ptp(['-Q', '--shell', "echo \"foo\" > $f"], \"foo\nbar\nbaz\n");
   is(slurp($f), "foo\n", 'escape command with quote');
 }{
   my $temp = File::Temp->new();
   my $f = $temp->filename;
-  my $out = ptp(['-e', '$a = "abc"', '--shell', "echo \"\$a\"> $f"], \"foo\nbar\nbaz\n");
+  my $out = ptp(['-e', '$a = "abc"', '--shell', "echo \"\$a\" > $f"], \"foo\nbar\nbaz\n");
   is(slurp($f), "abc\n", 'interpolate variable');
 }
+
+done_testing();

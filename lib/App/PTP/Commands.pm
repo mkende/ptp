@@ -604,6 +604,8 @@ sub do_shell {
     local $SIG{PIPE} = "IGNORE";
     open(my $pipe, '|-', $arg) or die "FATAL: Cannot execute command given to --${command}: $!\n";
     write_handle($pipe, $content, $modes->{missing_final_separator}, $options);
+    # When run by CPAN testers, this fails sometime for unknown reason. So this
+    # is only a warning and not a fatal error.
     close $pipe or print "WARNING: Cannot close pipe for command given to --${command}: $!\n";
   }  
 }

@@ -200,9 +200,12 @@ sub action_flags {(
   'custom-sort|cs=s' =>
       sub { my $opt = {%modes, comparator => $_[1] };
             push @pipeline, [ 'custom-sort', \&do_sort, $opt] },
-  'unique|u' =>
+  'unique|uniq|u' =>
       sub { push @pipeline, ['unique', \&do_list_op, {%modes},
                              \&App::PTP::Util::uniqstr, 0] },
+  'global-unique|guniq|gu' =>
+      sub { push @pipeline, ['global-unique', \&do_list_op, {%modes},
+                             \&App::PTP::Util::globaluniqstr, 0] },
   'head:i' => sub { push @pipeline, ['head', \&do_head, {%modes}, $_[1]] },
   'tail:i' => sub { push @pipeline, ['tail', \&do_tail, {%modes}, $_[1]] },
   'reverse|tac' =>

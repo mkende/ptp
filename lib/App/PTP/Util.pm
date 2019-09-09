@@ -16,6 +16,17 @@ sub uniqstr (@) {
   return grep { defined } @l;
 }
 
+# Globally delete duplicate lines even if they are not contiguous. Keep the
+# first occurence of each string.
+sub globaluniqstr (@) {
+  my (@l) = @_;
+  my %seen;
+  for my $i (0 .. $#l) {
+    undef $l[$i] if $seen{$l[$i]}++;
+  }
+  return grep { defined } @l;
+}
+
 {
   # A simple way to make a scalar be read-only.
   package App::PTP::Util::ReadOnlyVar;

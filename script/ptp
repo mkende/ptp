@@ -253,14 +253,14 @@ All markers are unset after this operation.
 Remove consecutive lines that are identical. You will often want to have a
 B<--sort> step before this one.
 
-All markers are unset after this operation.
+The markers of the lines that are kept are not changed.
 
 =item B<--gu>, B<--global-unique>
 
 Remove duplicate lines in the file, even if they are not consecutive. The first
 occurence of each line is kept.
 
-All markers are unset after this operation.
+The markers of the lines that are kept are not changed.
 
 =item B<--head> [I<n>]
 

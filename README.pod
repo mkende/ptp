@@ -46,7 +46,8 @@ can check which Perl you have installed with the following command:
 
 =head3 Installing from the Git sources
 
-To install the program manually from Git, you can run the following commands (you do need to have the B<make> and B<git> program installed):
+To install the program manually from Git, you can run the following commands
+(you do need to have the B<make> and B<git> program installed):
 
     git clone https://github.com/mkende/ptp.git
     cd ptp

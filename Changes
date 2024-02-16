@@ -1,7 +1,8 @@
 Revision history for Perl distribution App-PTP
 
-1.12 - ??
+1.12 - 2024-02-16
  - Use perl_dist_setup to setup the distribution
+ - Add --sq, --dq, and --ds modes to help work with shell escaping.
 
 1.11 - 2024-01-21
  - Remove usage of deprecated given/when keywords

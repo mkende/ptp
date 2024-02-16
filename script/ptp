@@ -778,6 +778,30 @@ B<--transpose> command becomes equivalent to the B<--pivot> one.
 
 =back
 
+=item B<--sq> I<character>, B<--single-quote-replacement>
+
+Define a character or a string which, if present in any of the commands that
+accept Perl code as argument, will be replaced by a single quote character
+(C<'>) before the command is passed to Perl.
+
+This is useful to work around limitations of shell escaping.
+
+=item B<--dq> I<character>, B<--double-quote-replacement>
+
+Define a character or a string which, if present in any of the commands that
+accept Perl code as argument, will be replaced by a double quote character
+(C<">) before the command is passed to Perl.
+
+This is useful to work around limitations of shell escaping.
+
+=item B<--ds> I<character>, B<--dollar-sigil-replacement>
+
+Define a character or a string which, if present in any of the commands that
+accept Perl code as argument, will be replaced by a dollar character (C<$>)
+before the command is passed to Perl.
+
+This is useful to work around limitations of shell escaping.
+
 =item B<--re> I<engine>, B<--regex-engine>
 
 Select the regular expression engine used for the B<--grep> and B<--substitute>

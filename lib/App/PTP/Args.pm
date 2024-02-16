@@ -141,6 +141,9 @@ sub options_flags {(
   'csv' => sub { $modes{input_field} = '\s*,\s*'; $modes{output_field} = ','; },
   'tsv' => sub { $modes{input_field} = '\t'; $modes{output_field} = "\t"; },
   'none' => sub { $modes{input_field} = '(?!)' },
+  'single-quote-replacement|single-quote|sq=s' => sub { $modes{single_quote} = $_[1] },
+  'double-quote-replacement|double-quote|dq=s' => sub { $modes{double_quote} = $_[1] },
+  'dollar-sigil-replacement|dollar-sigil|ds=s' => sub { $modes{dollar_sigil} = $_[1] },
 )}
 
 sub input_flags {(

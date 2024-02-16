@@ -1,4 +1,4 @@
-personal_ws-1.1 en 96 
+personal_ws-1.1 en 98 
 AliasVar
 CMD
 CPAN
@@ -36,6 +36,8 @@ comparator
 csv
 dir
 dirs
+dq
+ds
 elsif
 env
 eol

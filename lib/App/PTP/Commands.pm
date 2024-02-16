@@ -74,7 +74,7 @@ sub reset_safe_env {
     print "Skipping reset of perl environment.\n" if $options->{debug_mode};
     return;
   }
-  print "Reseting the perl environment.\n" if $options->{debug_mode};
+  print "Resetting the perl environment.\n" if $options->{debug_mode};
   # We can't undef the hash, otherwise the code compiled in the eval below no
   # longer refers to the same package (this would work however with a
   # string-eval instead of a block-eval as the code would be compiled and
@@ -169,7 +169,7 @@ sub prepare_re {
   $re = base_prepare_re($re, $modes);
   my $r;
   if ($modes->{regex_engine} ne 'perl') {
-    # Some play to correctly escape whetever special characters might be in the
+    # Some play to correctly escape whatever special characters might be in the
     # regex while preserving its semantics. This relies on the fact that the
     # 'Terse' option of Data::Dumper is set in the main program.
     # The regex-engine variable has been validated in the Args module.
@@ -299,11 +299,21 @@ sub get_code_in_safe_env {
   return $wrapped_code;
 }
 
+# Returns a modified version of $code with the effect of the modes currently
+# in effect applied.
+sub prepare_code {
+  my ($code, $modes) = @_;
+  $code =~ s/\Q$modes->{single_quote}/'/g if exists $modes->{single_quote};
+  $code =~ s/\Q$modes->{double_quote}/"/g if exists $modes->{double_quote};
+  $code =~ s/\Q$modes->{dollar_sigil}/\$/g if exists $modes->{dollar_sigil};
+  return $code;
+}
+
 sub do_perl {
   my ($content, $markers, $modes, $options, $cmd, $code) = @_;
   $. = 0;
   my $scmd = '-'.($cmd =~ s/^(..)/-$1/r); # --perl or -n.
-  my $wrapped_code = get_code_in_safe_env($code, $options, $scmd);
+  my $wrapped_code = get_code_in_safe_env(prepare_code($code, $modes), $options, $scmd);
   my @result = map { 
           $m_setter->set(\$markers->[$.]);
           $n_setter->set(++$.);
@@ -361,6 +371,7 @@ sub do_perl {
 
 sub do_execute {
   my ($content, $markers, $modes, $options, $cmd, $code) = @_;
+  $code = prepare_code($code, $modes) if $cmd ne 'M';
   $code = "use $code;" if $cmd eq 'M';
   eval_in_safe_env($code, $options);
   if ($@) {
@@ -386,6 +397,8 @@ sub do_load {
   }
 }
 
+# Notes: we are not applying the --sq, --dq, and --ds mode to the code passed
+# in the --comparator mode, as that is not a command.
 sub do_sort {
   my ($content, $markers, $modes, $options) = @_;
   if (ref($modes->{comparator}) eq 'CODE') {
@@ -608,8 +621,8 @@ sub do_tee {
 
 sub do_shell {
   my ($content, $markers, $modes, $options, $command, $arg) = @_;
-  die "INTERNAL ERROR: Unexpected command in do_tee: ${command}\n" unless $command eq 'shell';
-  $arg = maybe_interpolate($arg, $modes, $options, $command);
+  die "INTERNAL ERROR: Unexpected command in do_shell: ${command}\n" unless $command eq 'shell';
+  $arg = maybe_interpolate($arg, $modes, $options, prepare_code($command, $modes));
   {
     local $SIG{PIPE} = "IGNORE";
     open(my $pipe, '|-', $arg) or die "FATAL: Cannot execute command given to --${command}: $!\n";

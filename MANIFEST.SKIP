@@ -1,0 +1,30 @@
+# DO NOT EDIT! This file is written by perl_setup_dist.
+# If needed, you can add content at the end of the file.
+
+^\.aspell\..*$
+^\.aspelldict$
+^\.git/
+^\.github/
+^\.gitignore$
+^\.gitmodules$
+^\.perlcriticrc$
+^\.perltidyrc$
+^Makefile$
+^Makefile.old$
+^MANIFEST\.bak$
+^MANIFEST\.SKIP$
+^blib/
+^cover_db/
+^cpanfile\.snapshot$
+^dist_setup\.conf$
+^local/
+^t/001-perlcritic.t
+^t/001-perltidy.t
+^t/001-spelling.t
+^third_party/
+^pm_to_blib$
+^App-PTP-[\d.]+/
+^App-PTP-[\d.]+\.tar\.gz
+.*\.bak
+
+# End of the template. You can add custom content below this line.

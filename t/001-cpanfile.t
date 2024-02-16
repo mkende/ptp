@@ -5,17 +5,13 @@
 
 use strict;
 use warnings;
+
+use Test::CPANfile;
 use Test2::V0;
 
 our $VERSION = 0.01;
 
-BEGIN {
-  ok(eval 'use App::PTP; 1', 'use App::PTP');  ## no critic (ProhibitStringyEval, RequireCheckingReturnValueOfEval)
-}
-{
-  no warnings 'once';  ## no critic (ProhibitNoWarnings)
-  note("Testing App::PTP $App::PTP::VERSION, Perl $], $^X");
-}
+cpanfile_has_all_used_modules(perl_version => 5.022, develop => 1, suggests => 1);
 
 done_testing;
 

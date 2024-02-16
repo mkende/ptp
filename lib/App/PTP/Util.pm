@@ -21,7 +21,7 @@ sub uniqstr {
 }
 
 # Globally delete duplicate lines even if they are not contiguous. Keep the
-# first occurence of each string.
+# first occurrence of each string.
 sub globaluniqstr  {
   my ($content, $markers) = @_;
   my %seen;
@@ -68,7 +68,7 @@ sub globaluniqstr  {
 
 {
   # A simple way to make a scalar be an alias of another one (but does not allow
-  # to store undef in the variable as this is used to mark non-existant lines
+  # to store undef in the variable as this is used to mark non-existent lines
   # in some function and this package is tied to the marker variable).
   package App::PTP::Util::AliasVar;
   sub TIESCALAR {

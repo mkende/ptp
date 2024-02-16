@@ -59,7 +59,7 @@ sub close_global_output {
 # elements. The first one is an array-ref with all the lines of the file and the
 # second one is a variable indicating if the last line of the file had a final
 # separator.
-# This method uses the value of the `$intput_separator` global option.
+# This method uses the value of the `$input_separator` global option.
 sub read_handle {
   my ($handle, $options) = @_;
   local $/ = undef; # enable slurp mode;
@@ -140,7 +140,7 @@ sub write_handle {
 sub write_file {
   my ($file_name, $content, $missing_final_separator, $append, $options) = @_;
   my $m = $append ? '>>' : '>';
-  print "Outputing result to: ${m}${file_name}\n" if $options->{debug_mode};
+  print "Outputting result to: ${m}${file_name}\n" if $options->{debug_mode};
   open (my $out_fh, "${m}:encoding($options->{output_encoding})", $file_name)
     or die "Cannot open output file '${file_name}': $!.\n";
   write_handle($out_fh, $content, $missing_final_separator, $options);
@@ -158,14 +158,14 @@ sub write_output {
   }
 }
 
-# These two methodes are used by commands which read or write to side input/
+# These two methods are used by commands which read or write to side input/
 # output files. The difference is that they expect a '-' in the given filename
 # instead of the #stdin_marker, when referring to the standard input (or
 # output).
 my %known_side_output;
 sub write_side_output {
   my ($file_name, $content, $missing_final_separator, $options) = @_;
-  print "Outputing side result to: ${file_name}\n" if $options->{debug_mode};
+  print "Outputting side result to: ${file_name}\n" if $options->{debug_mode};
   if ($file_name eq '-') {
     write_handle(\*STDOUT, $content, $missing_final_separator, $options);
   } else {

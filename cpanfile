@@ -50,6 +50,6 @@ suggests 're::engine::RE2';
 suggests 're::engine::TRE';
 
 on 'test' => sub {
-  requires 'Benchmark';
+  suggests 'Benchmark';
   suggests 'Time::HiRes';
 }

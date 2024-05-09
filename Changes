@@ -1,5 +1,8 @@
 Revision history for Perl distribution App-PTP
 
+1.13 - 2024-05-09
+ - Make the program be easier to install from CPAN.
+
 1.12 - 2024-02-16
  - Use perl_dist_setup to setup the distribution
  - Add --sq, --dq, and --ds modes to help work with shell escaping.

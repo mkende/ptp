@@ -90,7 +90,7 @@ sub reset_global {
 sub set_output {
   my (undef, $f) = @_;
   if (defined $options{output}) {
-    die "Only a single occurence of --output or --append is allowed.\n";
+    die "Only a single occurrence of --output or --append is allowed.\n";
   }
   $options{output} = $f;
 }

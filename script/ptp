@@ -4,6 +4,8 @@ use 5.022;
 use strict;
 use warnings;
 
+use lib '/usr/local/lib/perl5';
+
 use App::PTP;
 
 our $VERSION = $App::PTP::VERSION;  ## no critic (ProhibitComplexVersion, RequireConstantVersion)

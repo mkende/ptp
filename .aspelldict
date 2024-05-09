@@ -1,8 +1,10 @@
-personal_ws-1.1 en 98 
+personal_ws-1.1 en 111 
 AliasVar
 CMD
 CPAN
 CRLF
+CentOS
+DESTINSTALLBIN
 EOF
 FindBin
 GetOptionsFromArray
@@ -16,9 +18,19 @@ PODNAME
 PTP
 PerlEnv
 Pipelining
+ProhibitAmbiguousNames
+ProhibitComplexVersion
+ProhibitMagicNumbers
+ProhibitNoWarnings
+ProhibitOneArgSelect
+ProhibitStringyEval
 ReadOnlyVar
+Readonly
+RequireArgUnpacking
+RequireConstantVersion
 SIG
 SafeEnv
+TODO
 TRE
 UTF
 Util
@@ -61,6 +73,7 @@ ns
 ownprocess
 passwd
 perl
+perlcritic
 perldoc
 perllocale
 pfn

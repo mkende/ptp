@@ -6,10 +6,11 @@
 use strict;
 use warnings;
 
-use English;
-use FindBin;
 use Test2::V0;
-use Readonly;
+
+use English;
+use File::Spec;
+use FindBin;
 
 our $VERSION = 0.01;
 
@@ -19,12 +20,11 @@ BEGIN {
   }
 }
 
-# Ensure a recent version of Test::Pod is present
 BEGIN {
-  Readonly my $TEST_POD_VERSION => 1.22;
-  eval "use Test::Pod ${TEST_POD_VERSION}";  ## no critic (ProhibitStringyEval, RequireCheckingReturnValueOfEval)
+  eval 'use Test2::Tools::PerlCritic';  ## no critic (ProhibitStringyEval, RequireCheckingReturnValueOfEval)
   if ($EVAL_ERROR) {
-    skip_all("Test::Pod ${TEST_POD_VERSION} required for testing POD");
+    my $msg = 'Test2::Tools::PerlCritic required to criticise code';
+    skip_all($msg);
   }
 }
 
@@ -39,10 +39,9 @@ if (!add_if_exists("${FindBin::Bin}/../blib")) {
   add_if_exists("${FindBin::Bin}/../lib");
 }
 add_if_exists("${FindBin::Bin}/../script");
-my @files = all_pod_files(@dirs);
-my $nb_files = @files;
-diag("Testing $nb_files POD files.");
 
-all_pod_files_ok(@files);
+perl_critic_ok(\@dirs);
+
+done_testing;
 
 # End of the template. You can add custom content below this line.

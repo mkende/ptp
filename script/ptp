@@ -6,14 +6,14 @@ use warnings;
 
 use App::PTP;
 
-our $VERSION = $App::PTP::VERSION;
+our $VERSION = $App::PTP::VERSION;  ## no critic (ProhibitComplexVersion, RequireConstantVersion)
 
 App::PTP::Run(\*STDIN, \*STDOUT, \*STDERR, \@ARGV);
 exit 0;
 
 # PODNAME: ptp
 # ABSTRACT: An expressive Pipelining Text Processor
- 
+
 __DATA__
 
 =pod
@@ -178,7 +178,7 @@ description of the affected commands.
 
 =item B<--g> I<pattern>, B<--grep>
 
-Filter each input to keep only the lines that match the given regular 
+Filter each input to keep only the lines that match the given regular
 expression. That expression cannot have delimiters (e.g. /foo/) so, if you
 want to pass options to the regex, you need to use the group syntax (e.g.
 (?i)foo).
@@ -195,7 +195,7 @@ B<-V> and the pattern can be interpreted as an exact string with B<-Q>.
 =item B<-s> I<pattern> I<subst>, B<--substitute>
 
 Replace all matches of the given regular expression by the given substitution
-pattern on each line of the input. The substitution string is evaluated like a 
+pattern on each line of the input. The substitution string is evaluated like a
 Perl string, so it can contain references to capture group in the regular
 expression using the B<$1>, B<$2>, etc. syntax.
 
@@ -495,7 +495,7 @@ If I<filename> is a single B<->, then write to the standard output.
 
 Note that the I<filename> is actually evaluated as a quoted Perl string, so it
 can contain variables from the Perl environment. This behavior can be
-deactivated by the B<-Q> flag, to have the B<filename> be used as-is (in 
+deactivated by the B<-Q> flag, to have the B<filename> be used as-is (in
 particular, you probably want to use this flag on platform where file-names use
 back-slash characters '\').
 
@@ -696,7 +696,7 @@ This is the default mode unless B<--case-insensitive> is specified.
 
 =item B<-Q>, B<--quote-regexp>
 
-Quote the regular expressions passed to the B<--grep> and B<--substitute> 
+Quote the regular expressions passed to the B<--grep> and B<--substitute>
 commands so that all (possibly) special characters are treated like normal
 characters. In practice this means that the matching done by these commands
 will be a simple text matching. Also disable variable interpolation for the

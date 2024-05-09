@@ -15,11 +15,13 @@ use Data::Dumper;
 use Exporter 'import';
 use File::Spec::Functions qw(rel2abs);
 use List::Util qw(min max);
+use Readonly;
 use Safe;
 
+our $VERSION = '0.01';
+
 # Every public function is exported by default.
-my @all_cmd = 
-    qw(prepare_perl_env do_grep do_substitute do_perl
+my @all_cmd = qw(prepare_perl_env do_grep do_substitute do_perl
     do_execute do_load do_sort do_list_op do_tail do_head do_delete_marked
     do_insert_marked do_set_markers do_number_lines do_file_name do_line_count
     do_cut do_paste do_pivot do_tee do_shell do_eat);
@@ -45,8 +47,9 @@ my $safe;  # Sets to Safe->new() before each new file processed;
 # PerlEnv.
 sub new_safe {
   my ($options) = @_;
-  if ($safe and $options->{preserve_perl_env} and
-      $safe->reval('$PerlEnv_LOADED')) {
+  if (  $safe
+    and $options->{preserve_perl_env}
+    and $safe->reval('$PerlEnv_LOADED')) {
     print "Skipping creation of new safe.\n" if $options->{debug_mode};
     return;
   }
@@ -54,8 +57,9 @@ sub new_safe {
   $safe = Safe->new();
   $safe->share_from('App::PTP::PerlEnv', \@App::PTP::PerlEnv::EXPORT_OK);
   if ($options->{use_safe} > 1) {
-    $safe->permit_only(qw(:base_core :base_mem :base_loop :base_math :base_orig
-                          :load));
+    $safe->permit_only(
+      qw(:base_core :base_mem :base_loop :base_math :base_orig
+          :load));
     $safe->deny(qw(tie untie bless));
   } else {
     $safe->deny_only(qw(:subprocess :ownprocess :others :dangerous));
@@ -80,12 +84,15 @@ sub reset_safe_env {
   # string-eval instead of a block-eval as the code would be compiled and
   # create a new package hash).
   %App::PTP::SafeEnv:: = ();
-  eval {
-    package App::PTP::SafeEnv;
-    App::PTP::PerlEnv->import(':all');
-    our $PerlEnv_LOADED = 1;  # For some reason the import does not work
-  };
-  if ($@) {
+  if (
+    !eval {
+
+      package App::PTP::SafeEnv;
+      App::PTP::PerlEnv->import(':all');
+      our $PerlEnv_LOADED = 1;  # For some reason the import does not work
+      1;
+    }
+  ) {
     chomp($@);
     die "INTERNAL ERROR: cannot prepare the SafeEnv package: ${@}\n";
   }
@@ -101,7 +108,7 @@ sub delete_perl_env {
 # Should be called for each new file so that the environment seen by the user
 # supplied Perl code is empty.
 sub prepare_perl_env {
-  my ($file_name, $options) = @_; 
+  my ($file_name, $options) = @_;
   if (ref($file_name)) {
     $f_setter->set('-');
     $F_setter->set('-');
@@ -119,22 +126,26 @@ sub prepare_perl_env {
 # process($file_name, \@pipeline, \%options, \@content, $missing_final_sep)
 # Applies all the stage of the pipeline on the given content (which is modified
 # in place).
-sub process {
+sub process {  ## no critic (RequireArgUnpacking)
+               # We are unpacking the arguments but later we are taking a reference on $_[0]
   my ($file_name, $pipeline, $options, $content, $missing_final_separator) = @_;
   if ($options->{debug_mode}) {
     # For long files, we print only the first and last lines.
     my @debug_content = @$content;
-    my $omit_msg = sprintf "... (%d lines omitted)", (@$content - 8);
-    splice @debug_content, 4, -4, $omit_msg if @$content > 10; 
+    Readonly::Scalar my $NB_DEBUG_LINES => 4;
+    Readonly::Scalar my $MAX_LINES_TO_PRINT => 10;
+    my $omit_msg = sprintf '... (%d lines omitted)', (@$content - ($NB_DEBUG_LINES * 2));
+    splice @debug_content, $NB_DEBUG_LINES, -$NB_DEBUG_LINES, $omit_msg
+        if @$content > $MAX_LINES_TO_PRINT;
     if (ref($file_name)) {
       print "Processing $${file_name} with content: ".Dumper(\@debug_content);
     } else {
       print "Processing '${file_name}' with content: ".Dumper(\@debug_content);
     }
-    print "Has final separator: ".($missing_final_separator ? 'false' : 'true')."\n";
+    print 'Has final separator: '.($missing_final_separator ? 'false' : 'true')."\n";
   }
   prepare_perl_env($file_name, $options);
-  @markers  = (0) x scalar(@$content);
+  @markers = (0) x scalar(@$content);
   my $markers = \@markers;
   for my $stage (@$pipeline) {
     my ($command, $code, $modes, @args) = @$stage;
@@ -143,8 +154,7 @@ sub process {
     $modes->{file_name_ref} = \$_[0];  # this is an alias to the passed value.
     if ($options->{debug_mode}) {
       local $Data::Dumper::Indent = 0;
-      printf "Executing command: %s(%s).\n", $command,
-             join(', ', map { Dumper($_) } @args);
+      printf "Executing command: %s(%s).\n", $command, join(', ', map { Dumper($_) } @args);
     }
     &$code($content, $markers, $modes, $options, @args);
   }
@@ -174,10 +184,11 @@ sub prepare_re {
     # 'Terse' option of Data::Dumper is set in the main program.
     # The regex-engine variable has been validated in the Args module.
     my $str_re = Dumper($re);
-    my $engine = "re::engine::".$modes->{regex_engine};
-    $r = eval "use ${engine};
-               \$re = $str_re;
-               qr/\$re/s ";
+    my $engine = 're::engine::'.$modes->{regex_engine};
+    # We could the safe to avoid this perlcritic warning but we are not actually
+    # executing code here, so the safe is not needed (and we would need to find
+    # variable names that are guaranteed not to collide with user code).
+    $r = eval "use ${engine}; \$re = $str_re; qr/\$re/s";  ## no critic (ProhibitStringyEval)
     if ($@) {
       chomp($@);
       die "FATAL: Cannot use the specified regex engine: ${@}\n";
@@ -227,12 +238,14 @@ sub do_grep {
   my ($use_stmt, $quoted_re) = prepare_re2($re, $modes);
   print "\$re = ${quoted_re}\n" if $options->{debug_mode};
   my $conjunction = $modes->{inverse_match} ? 'if' : 'unless';
-  my $wrapped = get_code_in_safe_env(
-      "{; ${use_stmt} undef \$_ ${conjunction} m ${quoted_re} }", $options, '--grep');
-  $. = 0;
-  map { $m_setter->set(\$markers->[$.]);
-        $n_setter->set($.++);
-        $wrapped->() } @$content;
+  my $wrapped = get_code_in_safe_env("{; ${use_stmt} undef \$_ ${conjunction} m ${quoted_re} }",
+    $options, '--grep');
+  local $. = 0;
+  map {
+    $m_setter->set(\$markers->[$.]);
+    $n_setter->set($.++);
+    $wrapped->()
+  } @$content;
   # This code is duplicated from do_perl:
   for my $i (0 .. $#$content) {
     if (not defined $content->[$i]) {
@@ -256,13 +269,14 @@ sub do_substitute {
   if ($options->{debug_mode}) {
     print "After: \$re = ${quoted_re}; \$subst = ${quoted_subst}\n";
   }
-  my $wrapped = get_code_in_safe_env(
-      "; ${use_stmt} s ${quoted_re}{${quoted_subst}}${g}", $options,
-      '--substitute');
-  $. = 0;
-  map { $m_setter->set(\$markers->[$.]);
-        $n_setter->set($.++);
-        $wrapped->() } @$content;
+  my $wrapped = get_code_in_safe_env("; ${use_stmt} s ${quoted_re}{${quoted_subst}}${g}",
+    $options, '--substitute');
+  local $. = 0;
+  map {
+    $m_setter->set(\$markers->[$.]);
+    $n_setter->set($.++);
+    $wrapped->()
+  } @$content;
 }
 
 sub warn_or_die_if_needed {
@@ -285,10 +299,7 @@ sub eval_in_safe_env {
   if ($options->{use_safe} > 0) {
     return $safe->reval($code);
   } else {
-    return eval("package App::PTP::SafeEnv;
-                 no strict;
-                 no warnings;
-                 ${code}");
+    return eval("package App::PTP::SafeEnv; no strict; no warnings; ${code}");  ## no critic (ProhibitStringyEval)
   }
 }
 
@@ -311,29 +322,29 @@ sub prepare_code {
 
 sub do_perl {
   my ($content, $markers, $modes, $options, $cmd, $code) = @_;
-  $. = 0;
-  my $scmd = '-'.($cmd =~ s/^(..)/-$1/r); # --perl or -n.
+  local $. = 0;
+  my $scmd = '-'.($cmd =~ s/^(..)/-$1/r);  # --perl or -n.
   my $wrapped_code = get_code_in_safe_env(prepare_code($code, $modes), $options, $scmd);
-  my @result = map { 
-          $m_setter->set(\$markers->[$.]);
-          $n_setter->set(++$.);
-          my $input = $_;
-          # Among other things, this ensures that the code is always executed in
-          # a scalar context.
-          my $r = eval { $wrapped_code->() };
-          # We can't use return as we're not in a sub.
-          if (warn_or_die_if_needed("Perl code failed in ${scmd}", $modes)) {
-            if ($cmd eq 'filter') {
-              1;
-            } elsif ($cmd eq 'n') {
-              $input;
-            } elsif ($cmd eq 'mark-line') {
-              $markers[$.];
-            }
-          } else {
-            $r;
-          }
-        } @$content;
+  my @result = map {
+    $m_setter->set(\$markers->[$.]);
+    $n_setter->set(++$.);
+    my $input = $_;
+    # Among other things, this ensures that the code is always executed in
+    # a scalar context.
+    my $r = eval { $wrapped_code->() };
+    # We can't use return as we're not in a sub.
+    if (warn_or_die_if_needed("Perl code failed in ${scmd}", $modes)) {
+      if ($cmd eq 'filter') {
+        1;
+      } elsif ($cmd eq 'n') {
+        $input;
+      } elsif ($cmd eq 'mark-line') {
+        $markers[$.];
+      }
+    } else {
+      $r;
+    }
+  } @$content;
 
   $n_setter->set(undef);
   $m_setter->set(\undef);
@@ -376,7 +387,7 @@ sub do_execute {
   eval_in_safe_env($code, $options);
   if ($@) {
     chomp($@);
-    my $scmd = '-'.($cmd =~ s/^(..)/-$1/r); # --execute or -M.
+    my $scmd = '-'.($cmd =~ s/^(..)/-$1/r);  # --execute or -M.
     die "FATAL: Perl code failed in ${scmd}: ${@}\n";
   }
 }
@@ -408,21 +419,19 @@ sub do_sort {
     if (${$modes->{comparator}} eq 'default') {
       @$content = sort @$content;
     } elsif (${$modes->{comparator}} eq 'numeric') {
-      no warnings "numeric";
+      no warnings 'numeric';  ## no critic (ProhibitNoWarnings)
       @$content = sort { $a <=> $b } @$content;
     } elsif (${$modes->{comparator}} eq 'locale') {
       use locale;
       @$content = sort { $a cmp $b } @$content;
     } else {
-      die sprintf "INTERNAL ERROR: Invalid comparator (%s)\n", 
-                  ${$modes->{comparator}};
+      die sprintf "INTERNAL ERROR: Invalid comparator (%s)\n", ${$modes->{comparator}};
     }
   } else {
-    die sprintf "INTERNAL ERROR: Invalid comparator type (%s)\n",
-                Dumper($modes->{comparator}) if ref $modes->{comparator};
+    die sprintf "INTERNAL ERROR: Invalid comparator type (%s)\n", Dumper($modes->{comparator})
+        if ref $modes->{comparator};
     my $cmp = $modes->{comparator};
-    my $sort = get_code_in_safe_env("sort { $cmp } \@_", $options,
-                                    'custom comparator');
+    my $sort = get_code_in_safe_env("sort { $cmp } \@_", $options, 'custom comparator');
     @$content = $sort->(@$content);
   }
   @$markers = (0) x scalar(@$content);
@@ -436,23 +445,26 @@ sub do_list_op {
   } elsif ($apply_on_markers eq 'same') {
     @$content = &$sub(@$content);
     @$markers = &$sub(@$markers);
-  } elsif ($apply_on_markers eq 'together' ) {
+  } elsif ($apply_on_markers eq 'together') {
     &$sub($content, $markers);
   } else {
-    die "INTERNAL ERROR: Invalid value for \$apply_on_markers passed to do_list_op: $apply_on_markers\n";
+    die
+        "INTERNAL ERROR: Invalid value for \$apply_on_markers passed to do_list_op: $apply_on_markers\n";
   }
 }
 
+Readonly::Scalar my $DEFAULT_TAIL_LEN => 10;
+
 sub do_tail {
   my ($content, $markers, $modes, $options, $len) = @_;
-  $len = 10 unless $len;
+  $len = $DEFAULT_TAIL_LEN unless $len;
   splice @$content, 0, -$len;
   splice @$markers, 0, -$len;
 }
 
 sub do_head {
   my ($content, $markers, $modes, $options, $len) = @_;
-  $len = 10 unless $len;
+  $len = $DEFAULT_TAIL_LEN unless $len;
   $len = -@$content if $len < -@$content;
   splice @$content, $len;
   splice @$markers, $len;
@@ -482,8 +494,7 @@ sub do_insert_marked {
   my $added = 0;
   my $wrapped;
   if (not $modes->{quote_regex}) {
-    $wrapped = get_code_in_safe_env("\"${line}\"", $options,
-                                    '--insert-marked');
+    $wrapped = get_code_in_safe_env("\"${line}\"", $options, '--insert-marked');
   }
   for my $i (0 .. $#content_temp) {
     next unless $markers_temp[$i];
@@ -496,8 +507,7 @@ sub do_insert_marked {
       $m_setter->set($markers_temp[$i]);
       $line =~ s/(?:[^\\]|^)((:?\\\\)*")/\\$1/g;
       $r = eval { $wrapped->() };
-      next if warn_or_die_if_needed(
-          'String interpolation failed in --insert-marked', $modes);
+      next if warn_or_die_if_needed('String interpolation failed in --insert-marked', $modes);
       # it should not be possible for the result to be undef...
     }
     # We never insert at a negative offset or before the previously added line.
@@ -513,13 +523,13 @@ sub do_insert_marked {
 
 sub do_set_markers {
   my ($content, $markers, $modes, $options, $value) = @_;
-  @$markers = ($value)x scalar(@$content);
+  @$markers = ($value) x scalar(@$content);
 }
 
 sub do_number_lines {
   my ($content, $markers, $modes, $options) = @_;
   my $line = 0;
-  my $n = int(log(@$content) / log(10)) + 1;
+  my $n = int(log(@$content) / log(10)) + 1;  ## no critic (ProhibitMagicNumbers)
   map { $_ = sprintf("%${n}d  %s", ++$line, $_) } @$content;
 }
 
@@ -528,12 +538,11 @@ sub do_file_name {
   my $name;
   if (ref($modes->{file_name_ref}) eq 'SCALAR') {
     $name = ${$modes->{file_name_ref}};
-  } elsif (ref($modes->{file_name_ref}) eq 'REF' and
-           ref(${$modes->{file_name_ref}}) eq 'SCALAR') {
+  } elsif (ref($modes->{file_name_ref}) eq 'REF'
+    and ref(${$modes->{file_name_ref}}) eq 'SCALAR') {
     $name = $${$modes->{file_name_ref}};
   } else {
-    die 'INTERNAL ERROR: Invalid input marker: '.Dumper($modes->{file_name_ref})
-        ."\n";
+    die 'INTERNAL ERROR: Invalid input marker: '.Dumper($modes->{file_name_ref})."\n";
   }
   if ($replace_all) {
     # Does nothing to empty file.
@@ -558,15 +567,20 @@ sub do_cut {
   my $re = prepare_re($modes->{input_field}, $modes);
   if ($options->{debug_mode}) {
     print "Examples of the --cut operation:\n";
-    my @debug = map {  [split $re] } @$content[0..min(5, $#$content)];
-    map { for ((@$_)[@$spec]) { $_ = "-->${_}<--" if $_ } } @debug;
+    Readonly::Scalar my $MAX_LINES_TO_PRINT => 5;
+    my @debug = map { [split $re] } @$content[0 .. min($MAX_LINES_TO_PRINT, $#$content)];
+    map {
+      for ((@$_)[@$spec]) { $_ = "-->${_}<--" if $_ }
+    } @debug;
     local $, = $modes->{output_field};
     local $\ = $options->{output_separator};
     map { print @$_ } @debug;
   }
   @$content =
       map {
-        join $modes->{output_field}, map { $_ ? $_ : '' } (split $re)[@$spec]
+        join $modes->{output_field},
+        map { $_ ? $_ : '' }
+        (split $re)[@$spec]
       } @$content;
 }
 
@@ -594,10 +608,10 @@ sub do_pivot {
     my @lines =
         map { my $r = [split $re]; $m = max($m, scalar(@$r)); $r } @$content;
     @$content =
-      map {
+        map {
           my $c = $_;
           join $modes->{output_field}, map { $_->[$c] // '' } @lines;
-      } 0..($m - 1);
+        } 0 .. ($m - 1);
   } elsif ($action eq 'pivot') {
     $m = 1;
     @$content = (join $modes->{output_field}, @$content);
@@ -615,8 +629,7 @@ sub do_tee {
   $file_name = maybe_interpolate($file_name, $modes, $options, 'tee');
   # This missing_final_separator is not really an option, it is added in the
   # modes struct by the 'process' method, specifically for this function.
-  write_side_output($file_name, $content, $modes->{missing_final_separator},
-                    $options);
+  write_side_output($file_name, $content, $modes->{missing_final_separator}, $options);
 }
 
 sub do_shell {
@@ -624,13 +637,13 @@ sub do_shell {
   die "INTERNAL ERROR: Unexpected command in do_shell: ${command}\n" unless $command eq 'shell';
   $arg = maybe_interpolate($arg, $modes, $options, prepare_code($command, $modes));
   {
-    local $SIG{PIPE} = "IGNORE";
+    local $SIG{PIPE} = 'IGNORE';
     open(my $pipe, '|-', $arg) or die "FATAL: Cannot execute command given to --${command}: $!\n";
     write_handle($pipe, $content, $modes->{missing_final_separator}, $options);
     # When run by CPAN testers, this fails sometime for unknown reason. So this
     # is only a warning and not a fatal error.
     close $pipe or print "WARNING: Cannot close pipe for command given to --${command}: $!\n";
-  }  
+  }
 }
 
 sub do_eat {

@@ -13,7 +13,9 @@
 ^Makefile.old$
 ^MANIFEST\.bak$
 ^MANIFEST\.SKIP$
+^README(\..*)?$
 ^blib/
+^build/
 ^cover_db/
 ^cpanfile\.snapshot$
 ^dist_setup\.conf$
@@ -23,10 +25,10 @@
 ^t/001-spelling.t
 ^third_party/
 ^pm_to_blib$
+^pod2htmd\.tmp$
+^pod2html/
 ^App-PTP-[\d.]+/
 ^App-PTP-[\d.]+\.tar\.gz
 .*\.bak
 
 # End of the template. You can add custom content below this line.
-
-^README\.pod

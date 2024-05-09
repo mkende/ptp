@@ -67,22 +67,3 @@ run the following command:
 
 Note: if this is the first time that you run the B<cpan> command, you will be
 asked to configure it. The default answer to most questions is usually fine.
-
-=head2 DISTRIBUTION
-
-The main development of this software is done on
-L<GitHub|https://github.com/mkende/ptp>. However, it is also available on CPAN.
-
-The following can be used only by the module maintainer on CPAN. To update the
-CPAN module, remember to increment the version number and then run the following
-commands:
-
-    perl Makefile.PL
-    make distcheck
-    # Optionally, to add files not in the manifest:
-    # make manifest
-    make dist
-
-Finally, upload the F<App-PTP-I<version>.tar.gz> file that has been created
-through L<PAUSE|https://pause.perl.org>, ideally putting it under an F<App-PTP>
-directory.

@@ -116,7 +116,6 @@ sub options_flags {
       $options{merge} = 1;
       $cur_pipeline = \@post_merge_pipeline;
     },
-    ,
     'in-place|i!' => \$options{in_place},
     'output|o=s' => \&set_output,
     'append|a=s' => sub { set_output(@_); $options{append} = 1; },

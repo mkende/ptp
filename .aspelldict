@@ -1,4 +1,4 @@
-personal_ws-1.1 en 111 
+personal_ws-1.1 en 112 
 AliasVar
 CMD
 CPAN
@@ -77,6 +77,7 @@ perlcritic
 perldoc
 perllocale
 pfn
+pre
 printf
 ptp
 qw

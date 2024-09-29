@@ -1,6 +1,6 @@
 Revision history for Perl distribution App-PTP
 
-1.14 - ??
+1.14 - 2024-09-29
  - Do not index the packages under App::PTP (except App::PTP itself). This was
    the behavior until v1.12.
  - Change the behavior of the --merge option so that it applies at the point

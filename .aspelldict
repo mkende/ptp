@@ -1,4 +1,4 @@
-personal_ws-1.1 en 112 
+personal_ws-1.1 en 119 
 AliasVar
 CMD
 CPAN
@@ -13,6 +13,7 @@ LF
 MERCHANTABILITY
 MarkersArray
 NONINFRINGEMENT
+NUL
 PCRE
 PODNAME
 PTP
@@ -24,6 +25,8 @@ ProhibitMagicNumbers
 ProhibitNoWarnings
 ProhibitOneArgSelect
 ProhibitStringyEval
+RO
+RW
 ReadOnlyVar
 Readonly
 RequireArgUnpacking
@@ -45,6 +48,8 @@ cmd
 cmp
 coderef
 comparator
+cpanm
+cpanminus
 csv
 dir
 dirs
@@ -60,6 +65,7 @@ expressivity
 fh
 filepath
 fn
+gcc
 globaluniqstr
 gu
 guniq
@@ -99,6 +105,7 @@ sublicense
 subprocess
 subst
 substr
+sudo
 tac
 tempfile
 tsv

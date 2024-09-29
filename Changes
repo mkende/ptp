@@ -1,5 +1,8 @@
 Revision history for Perl distribution App-PTP
 
+1.15 - ??
+ - Remove a remaining smartmatch usage from our benchmarks.
+
 1.14 - 2024-09-29
  - Do not index the packages under App::PTP (except App::PTP itself). This was
    the behavior until v1.12.

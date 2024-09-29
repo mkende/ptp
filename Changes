@@ -1,6 +1,6 @@
 Revision history for Perl distribution App-PTP
 
-1.15 - ??
+1.15 - 2024-09-29
  - Remove a remaining smartmatch usage from our benchmarks.
 
 1.14 - 2024-09-29

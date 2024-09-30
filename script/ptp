@@ -859,6 +859,17 @@ Note that the Perl environment is entirely reset between each file (and when
 encountering the B<--merge> command) unless the B<--preserve-perl-env> option
 was passed.
 
+When using the default B<--safe 0> mode, the following modules are loaded in the
+environment, with most of their methods imported by default, in addition to the
+variables and functions listed below :
+L<Data::Dumper> (C<Dumper>, with C<Terse> set to true by default),
+L<File::Basename> (C<fileparse>, C<basename>, C<dirname>), L<File::Copy>
+(C<copy>, C<move>), L<File::Path> (C<make_path>, C<remove_tree>),
+L<File::Spec::Functions> (C<canonpath>, ...), L<List::Util> (C<any>, C<all>,
+C<none>, C<min>, C<max>, C<sum>, ...), L<Math::Trig> (C<pi>, C<acos>, ...),
+L<Text::Tabs> (C<expand>, C<unexpand>, C<$tabstop>), L<Text::Wrap> (C<wrap>,
+C<fill>, C<$columns>, ...).
+
 =head3 B<$_>
 
 This variable is set to the current line being processed. In most context (but

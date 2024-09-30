@@ -171,7 +171,7 @@ C<">, or C<$> in all I<code> arguments
 =item B<--re> I<engine>, B<--regex-engine>: use the specified regex engine (e.g.
 I<RE2>, I<PCRE>, I<TRE>, I<GNU>, etc.) if installed
 
-=item B<-X> (B<--fatal-error>), B<--ignore-error>: dies on error in B<--perl>,
+=item B<-X> (B<--fatal-error>), B<--ignore-error>: die on error in B<--perl>,
 B<-n> and B<--filter>
 
 =back
@@ -182,6 +182,11 @@ Variables and functions available to I<code> arguments as well as I<regex>,
 I<string>, I<filename>, and I<command> ones (unless B<-Q> has been passed).
 
 =over 8
+
+=item B<Dumper>, B<fileparse>, B<basename>, B<dirname>, B<copy>, B<move>,
+B<make_path>, B<remove_tree>, B<canonpath>, B<any>, B<all>, B<none>, B<min>,
+B<max>, B<sum>, B<pi>, B<acos>, B<expand>, B<unexpand>, B<$tabstop>, B<wrap>,
+B<fill>, B<$columns>, ...
 
 =item B<$_>: current line content (I<RW>)
 

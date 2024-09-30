@@ -120,7 +120,7 @@ default is C<\n>
 =item B<-0>: set B<--input-separator> to C<NUL> and B<--output-separator> to the
 empty string.
 
-=item B<--00>: set B<--output-separator> to the C<NUL>, useful with C<xargs -0>
+=item B<--00>: set B<--output-separator> to C<NUL>, useful with C<xargs -0>
 
 =item B<-h> (B<--help>), B<--version>: remember to have B<perldoc> installed
 

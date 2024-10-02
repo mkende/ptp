@@ -140,7 +140,7 @@ sub postamble {
 cheat_sheet: ptp_cheat_sheet.html ptp_cheat_sheet.pdf
 
 ptp_cheat_sheet.pdf: lib/App/PTP/Cheat_Sheet.pod
-\tpod2pdf --left-margin 30 --right-margin 30 --top-margin 36 --bottom-margin 36 --title="PTP Cheat Sheet" --noheader --nofooter \$< | pdfjam --landscape --nup 2x1 --outfile \$@ 2>/dev/null
+\tpod2pdf --left-margin 30 --right-margin 30 --top-margin 34 --bottom-margin 34 --title="PTP Cheat Sheet" --noheader --nofooter \$< | pdfjam --landscape --nup 2x1 --outfile \$@ 2>/dev/null
 
 ptp_cheat_sheet.html: lib/App/PTP/Cheat_Sheet.pod
 \tpod2html --noindex --title="PTP Cheat Sheet" \$< > \$@

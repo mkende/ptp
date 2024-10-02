@@ -624,9 +624,13 @@ output compatible with B<-0> option of C<xargs>.
 
 =item B<-h>, B<--help>
 
-Print this help message and exits. Note: the help message will be much printed
-improved if you have the B<perldoc> program installed (sometimes from a
-B<perl-doc> package).
+Print this help message and exit. Note: the help message will be much improved
+if you have the B<perldoc> program installed (sometimes from a B<perl-doc>
+package).
+
+=item B<--cheat>
+
+Print the cheat sheet content and exit.
 
 =item B<--version>
 

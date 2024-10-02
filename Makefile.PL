@@ -150,5 +150,7 @@ clean_cheat_sheet:
 
 clean:: clean_cheat_sheet
 
+create_distdir: ptp_cheat_sheet.pdf
+
 MAKE_FRAGMENT
 }

@@ -25,9 +25,15 @@ See examples of B<PTP> in action in the L<documentation|ptp/EXAMPLES>.
 
 =head2 DOCUMENTATION
 
-You can find the documentation for the program itself on L<meta::cpan|ptp>.
+You can find the documentation for the program itself on L<meta::cpan|ptp> or on
+the L<project wiki|https://github.com/mkende/ptp/wiki/Full-Documentation>.
 After the program is installed, you can also get its documentation by running
 any of the following commands: B<man ptp>, B<ptp --help> or B<perldoc ptp>.
+
+There is also a quick reference card, available with the B<--cheat> command line
+flag or on L<meta::cpan|App::PTP::Cheat_Sheet>, on the
+L<project wiki|https://github.com/mkende/ptp/wiki/Cheat-Sheet> or in
+L<PDF format|https://metacpan.org/dist/App-PTP/source/ptp_cheat_sheet.pdf>.
 
 The built-in B<--help> rendering will be better if the B<perldoc> program is
 installed. It usually comes in a B<perl-doc> package on most systems.

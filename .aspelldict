@@ -1,4 +1,4 @@
-personal_ws-1.1 en 126 
+personal_ws-1.1 en 129 
 AliasVar
 CMD
 CPAN
@@ -46,6 +46,7 @@ basename
 binmode
 boolean
 canonpath
+catfile
 chdir
 cmd
 cmp
@@ -74,6 +75,7 @@ gcc
 globaluniqstr
 gu
 guniq
+helpshort
 ist
 lc
 len
@@ -92,6 +94,7 @@ pre
 printf
 ptp
 qw
+rg
 scmd
 sed
 sep

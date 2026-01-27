@@ -1,6 +1,6 @@
 Revision history for Perl distribution App-PTP
 
-1.17 - ??
+1.17 - 2026-01-27
  - Add a --cheat command line option to display the cheat sheet.
  - Add a --xargs options (that behaves like the equivalent program).
  - Make the --shell command eat the content of the file.

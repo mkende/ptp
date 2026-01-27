@@ -524,7 +524,7 @@ pass of interpretation. That pass cannot be deactivated.
 
 Execute the given command for each line of the current file. The command can
 contain the string C<{}> which is replaced by the content of the of the line
-(without it’s end of line separator). If the command contains no C<{}>, then the
+(without it's end of line separator). If the command contains no C<{}>, then the
 content of the line is appended to the command.
 
 The passed command is interpolated as a Perl string, similarly than with the
@@ -533,6 +533,19 @@ name is inserted I<after> the interpolation, if any.
 
 The output of the command goes to the standard output and is not read by the
 program. The current file is empty after this command.
+
+=item B<--push>
+
+Push the current content and markers of the file to a stack. The content and
+markers are not modified by this command.
+
+=item B<--pop>
+
+Pop the content and markers of the file from the stack. The content and markers
+are restored to what they were when the B<--push> command was called. That
+command must have been called before on the current file. In particular it is
+not possible to pop after a B<--merge> command content that would have been
+pushed before it.
 
 =back
 

@@ -4,6 +4,7 @@ Revision history for Perl distribution App-PTP
  - Add a --cheat command line option to display the cheat sheet.
  - Add a --xargs options (that behaves like the equivalent program).
  - Make the --shell command eat the content of the file.
+ - Add a pair of --push/--pop commands to save and restore the file content.
 
 1.16 - 2024-30-02
  - Add a "cheat sheet" POD to the distribution.

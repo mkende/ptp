@@ -95,7 +95,9 @@ the file
 
 =item B<--shell> I<command>: sends the content as input to the command
 
-=item B<--xargs> I<command>: execute the commmand (which can contain C<{}>) for each line.
+=item B<--xargs> I<command>: execute the command (which can contain C<{}>) for each line.
+
+=item B<--push>, B<--pop>: push and pop the entire content of the current file.
 
 =back
 

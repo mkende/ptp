@@ -309,7 +309,12 @@ sub action_flags {
     'xargs=s' => sub {
       push @{$cur_pipeline}, ['xargs', \&do_shell, {%modes}, 'xargs', $_[1]];
     },
-  )
+    'push' => sub {
+      push @{$cur_pipeline}, ['push', \&do_push, {%modes}, 'push'];
+    },
+    'pop' => sub {
+      push @{$cur_pipeline}, ['pop', \&do_push, {%modes}, 'pop'];
+    },)
 }
 
 sub all_args {

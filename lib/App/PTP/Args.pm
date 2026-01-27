@@ -305,7 +305,11 @@ sub action_flags {
     'tee=s' => sub { push @{$cur_pipeline}, ['tee', \&do_tee, {%modes}, $_[1]] },
     'shell=s' => sub {
       push @{$cur_pipeline}, ['shell', \&do_shell, {%modes}, 'shell', $_[1]];
-    })
+    },
+    'xargs=s' => sub {
+      push @{$cur_pipeline}, ['xargs', \&do_shell, {%modes}, 'xargs', $_[1]];
+    },
+  )
 }
 
 sub all_args {

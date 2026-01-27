@@ -95,6 +95,8 @@ the file
 
 =item B<--shell> I<command>: sends the content as input to the command
 
+=item B<--xargs> I<command>: execute the commmand (which can contain C<{}>) for each line.
+
 =back
 
 =head2 PROGRAM BEHAVIOR

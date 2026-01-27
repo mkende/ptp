@@ -656,16 +656,26 @@ sub do_tee {
 
 sub do_shell {
   my ($content, $markers, $modes, $options, $command, $arg) = @_;
-  die "INTERNAL ERROR: Unexpected command in do_shell: ${command}\n" unless $command eq 'shell';
   $arg = maybe_interpolate($arg, $modes, $options, prepare_code($command, $modes));
-  {
+  if ($command eq 'shell') {
     local $SIG{PIPE} = 'IGNORE';
     open(my $pipe, '|-', $arg) or die "FATAL: Cannot execute command given to --${command}: $!\n";
     write_handle($pipe, $content, $modes->{missing_final_separator}, $options);
     # When run by CPAN testers, this fails sometime for unknown reason. So this
     # is only a warning and not a fatal error.
     close $pipe or print "WARNING: Cannot close pipe for command given to --${command}: $!\n";
+  } elsif ($command eq 'xargs') {
+    for my $i (0 .. $#$content) {
+      next unless defined $content->[$i];
+      my $cmd = $arg;
+      $cmd =~ s/{}/$content->[$i]/ or $cmd .= ' '.$content->[$i];
+      system($cmd);
+    }
+  } else {
+    die "INTERNAL ERROR: Unexpected command in do_shell: ${command}\n";
   }
+  @$content = ();
+  @$markers = ();
 }
 
 sub do_eat {

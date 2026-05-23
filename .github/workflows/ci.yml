@@ -19,10 +19,15 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu,  windows,  macos, ]
-        perl: [ '5.22', '5.38' ]
+        perl: [ '5.22', '5.42' ]
         exclude:
           # MacOS runners are very expensive, so let’s run only on the latest Perl
           - os: macos
+            perl: '5.22'
+
+          # Old Windows Perl are often missing features (TLS stack) which cause
+          # issues in the CI.
+          - os: windows
             perl: '5.22'
 
         # From time to time, Strawberry Perl does not have the latest Perl
@@ -58,9 +63,12 @@ jobs:
 
     - name: Install Modules
       if:  ${{ matrix.os != 'macos' }}
+      # install the dependencies in 3 steps to limit the risk of dependency loops.
       run: |
         cpanm -V
-        cpanm -v --installdeps --notest --with-configure --with-recommends --with-suggests --with-all-features .
+        cpanm -v --installdeps --notest --with-configure --with-all-features .
+        cpanm -v --installdeps --notest --with-recommends --with-all-features .
+        cpanm -v --installdeps --notest --with-suggests --with-all-features .
 
     # MacOS runners are very costly, so let’s install the minimum amount of
     # dependency.

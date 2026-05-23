@@ -3,6 +3,7 @@
 
 ^\.aspell\..*$
 ^\.aspelldict$
+^\.claude/
 ^\.git/
 ^\.github/
 ^\.gitignore$

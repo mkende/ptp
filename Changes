@@ -1,6 +1,6 @@
 Revision history for Perl distribution App-PTP
 
-1.18 - ??
+1.18 - 2026-05-23
  - Add a --semver-sort (--ss) command to sort version strings.
 
 1.17 - 2026-01-27

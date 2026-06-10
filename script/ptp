@@ -290,7 +290,7 @@ like correctly comparing equivalent characters and/or ignoring the case.
 
 The markers of the input lines are reset (no line is marked after this command).
 
-=item B<--ss>, B<--semver-sort>
+=item B<--vs>, B<--version-sort>
 
 Sort the content of the input as version strings, following the precedence
 rules of L<Semantic Versioning|https://semver.org>. So, for example, C<1.9.0>

@@ -7,7 +7,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 
 use AppPtpTest;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 {
   my $data = ptp([qw(--sort)], 'default_data.txt');
@@ -59,6 +59,13 @@ my $numeric_input = "20ab\n1d\n20.5\n99\nabc\n";
   # (the leading "v" is ignored and the major version is honored).
   my $data = ptp([qw(--ss)], \"ptp/v1.10\nptp/v1.2\nabc/v2.0\nabc/v1.0\n");
   is($data, "abc/v1.0\nabc/v2.0\nptp/v1.2\nptp/v1.10\n", 'semver prefix sort');
+}{
+  # A multi-segment path-like prefix is recognized in full, so the version part
+  # is sorted as a semver instead of the whole prefix being treated as 0.
+  my ($data, $err) = ptp([qw(--ss)],
+    \"refs/tags/ptp/v1.10\nrefs/tags/ptp/v1.2\nrefs/tags/abc/v2.0\n");
+  is($data, "refs/tags/abc/v2.0\nrefs/tags/ptp/v1.2\nrefs/tags/ptp/v1.10\n",
+     'semver sort with a multi-segment prefix');
 }{
   # A non-numeric core component is treated as 0 and triggers a warning.
   my ($data, $err) = ptp([qw(--ss)], \"abc\n1.0\n");

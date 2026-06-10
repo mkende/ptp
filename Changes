@@ -1,5 +1,10 @@
 Revision history for Perl distribution App-PTP
 
+1.19 - ????-??-??
+ - Fix --semver-sort (--ss) to recognize multi-segment path-like prefixes (e.g.
+   "refs/tags/projectname/v1.0.0") so the version part is sorted correctly
+   instead of the whole prefix being treated as 0.
+
 1.18 - 2026-05-23
  - Add a --semver-sort (--ss) command to sort version strings.
 

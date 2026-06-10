@@ -1,4 +1,4 @@
-personal_ws-1.1 en 130
+personal_ws-1.1 en 131
 AliasVar
 CMD
 CPAN
@@ -92,6 +92,7 @@ perllocale
 pfn
 pre
 printf
+projectname
 ptp
 qw
 rg

@@ -32,6 +32,15 @@ cmp_ok_sign('v1.2', '1.2', 0, 'a leading v is ignored');
 my $dotted = App::PTP::Util::Semver::parse('1.2/3');
 is($dotted->{prefix}, '', 'no prefix when a dot precedes the slash');
 
+# A multi-segment path-like prefix is recognized in full (the version part is
+# the trailing 'v1.0.0', not 0 because of an over-eager dot split).
+my $nested = App::PTP::Util::Semver::parse('refs/tags/projectname/v1.0.0');
+is($nested->{prefix}, 'refs/tags/projectname', 'the full multi-segment prefix is captured');
+is_deeply($nested->{core}, [1, 0, 0], 'the version core follows the multi-segment prefix');
+is_deeply($nested->{warnings}, [], 'a multi-segment prefix produces no warning');
+cmp_ok_sign('refs/tags/p/v1.9.0', 'refs/tags/p/v1.10.0', -1,
+  'nested prefixes are grouped and ordered by version');
+
 # Parsing warnings for non-numeric core components.
 is_deeply(App::PTP::Util::Semver::parse('1.2.3')->{warnings}, [],
   'a clean version produces no warning');

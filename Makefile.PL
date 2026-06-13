@@ -70,7 +70,7 @@ ALL_EXE := script/ptp
 
 distupload: distcheck disttest
 \t\$(MAKE) tardist
-\tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
+\tcpan-upload --directory \$(DISTNAME) \$(DISTVNAME).tar\$(SUFFIX)
 
 cover:
 \tcover -test

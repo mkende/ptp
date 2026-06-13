@@ -1,6 +1,6 @@
 Revision history for Perl distribution App-PTP
 
-1.19 - ????-??-??
+1.19 - 2026-06-13
  - Rename the --semver-sort (--ss) command to --version-sort (--vs). The old
    names are no longer recognized.
  - Fix --version-sort (--vs) to recognize multi-segment path-like prefixes (e.g.
